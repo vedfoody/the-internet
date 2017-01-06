@@ -1,6 +1,6 @@
 package tests;
 
-import java.awt.AWTException;
+import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -20,6 +20,12 @@ import javax.mail.search.ComparisonTerm;
 import javax.mail.search.ReceivedDateTerm;
 
 public class MavenTest extends AbstractTest {
+
+    @Test(dependsOnGroups = "init", groups = "frame")
+    public void testNestedFrame() throws InterruptedException {
+        FramePage framePage = PageFactory.initElements(driver, FramePage.class);
+        Assert.assertEquals(framePage.open().goToNestedFramePage().jumpToTopFrame().jumpToLeftFrame().getBodyText(), "LEFT");
+    }
 
     @Test(dependsOnGroups = "init", groups = "forgot-password")
     public void sendForgotPasswordEmail() throws MessagingException, InterruptedException {
