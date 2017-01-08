@@ -1,5 +1,13 @@
 package tests;
 
+import email.MyImap;
+import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import pages.*;
+import variables.GlobalVariables;
+
+import javax.mail.MessagingException;
 import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,24 +15,19 @@ import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.Date;
 
-import email.MyImap;
-import org.openqa.selenium.support.PageFactory;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-import pages.*;
-import variables.GlobalVariables;
-
-import javax.mail.MessagingException;
-import javax.mail.search.ComparisonTerm;
-import javax.mail.search.ReceivedDateTerm;
-
 public class MavenTest extends AbstractTest {
 
     @Test(dependsOnGroups = "init", groups = "frame")
-    public void testNestedFrame() throws InterruptedException {
+    public void jumpIntoNestedFrame() throws InterruptedException {
         FramePage framePage = PageFactory.initElements(driver, FramePage.class);
-        Assert.assertEquals(framePage.open().goToNestedFramePage().jumpToTopFrame().jumpToLeftFrame().getBodyText(), "LEFT");
+        Assert.assertEquals(framePage.open().goToNestedFramePage().jumpIntoTopFrame().jumpIntoLeftFrame().getBodyText(), "LEFT");
+    }
+
+    @Test(dependsOnGroups = "init", groups = "frame")
+    public void jumpIntoIFrame() {
+        FramePage framePage = PageFactory.initElements(driver, FramePage.class);
+        Assert.assertEquals(framePage.open().goToIframePage().jumpIntoIframe().getBodyText(),
+                "Your content goes here.");
     }
 
     @Test(dependsOnGroups = "init", groups = "forgot-password")
@@ -35,7 +38,7 @@ public class MavenTest extends AbstractTest {
         PageFactory.initElements(driver, ForgotPasswordPage.class).open().retrievePassword(GlobalVariables.TEST_EMAIL);
 
         new MyImap(GlobalVariables.HOST, GlobalVariables.USERNAME, GlobalVariables.PASSWORD)
-                .getMessageWithRetry(now, 10);;
+                .getMessageWithRetry(now, 10);
     }
 
     @Test(dependsOnGroups = "init", groups = "upload-file")
