@@ -1,11 +1,10 @@
 package pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.List;
 
 abstract class AbstractPage {
 
@@ -29,9 +28,19 @@ abstract class AbstractPage {
         }
     }
 
-    WebElement waitForElementVisible(WebElement element) {
+    protected WebElement waitForElementVisible(WebElement element) {
         return new WebDriverWait(driver, TIME_OUT_FOR_LOADING_ELEMENT)
                 .until(ExpectedConditions.visibilityOf(element));
+    }
+
+    protected WebElement waitForElementVisible(By locator, SearchContext context) {
+        return new WebDriverWait(driver, TIME_OUT_FOR_LOADING_ELEMENT)
+                .until(ExpectedConditions.visibilityOf(context.findElement(locator)));
+    }
+
+    protected List<WebElement> waitForElementsVisible(By locator, SearchContext context) {
+        return new WebDriverWait(driver, TIME_OUT_FOR_LOADING_ELEMENT)
+                .until(ExpectedConditions.visibilityOfAllElements(context.findElements(locator)));
     }
 
     WebElement waitForElementPresent(By locator) {

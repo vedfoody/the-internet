@@ -17,25 +17,32 @@ public class FramePage extends AbstractPage {
 
     public FramePage open() {
         driver.get(ROOT_URL + "/frames");
+        waitForElementVisible(By.cssSelector(".example h3"), driver);
+
+
+
         return this;
     }
 
     public FramePage goToNestedFramePage() throws InterruptedException {
-        getLinks().stream()
-                .filter(e -> e.getText().equals("Nested Frames"))
-                .findFirst()
-                .get()
-                .findElement(By.tagName("a")).click();
+        findLink("Nested Frames").findElement(By.tagName("a")).click();
 
         return this;
     }
 
-    public FramePage jumpToLeftFrame() {
-        driver.switchTo().frame(waitForElementVisible(driver.findElement(By.cssSelector("frame[src='/frame_left']"))));
+    public FramePage goToIframePage() {
+        findLink("iFrame").findElement(By.tagName("a")).click();
+        waitForIframeLoading();
+
         return this;
     }
 
-    public FramePage jumpToTopFrame() {
+    public FramePage jumpIntoLeftFrame() {
+        driver.switchTo().frame(waitForElementVisible(By.cssSelector("frame[src='/frame_left']"), driver));
+        return this;
+    }
+
+    public FramePage jumpIntoTopFrame() {
         driver.switchTo().frame(waitForElementVisible(driver.findElement(By.cssSelector("frame[src='/frame_top']"))));
         return this;
     }
@@ -44,7 +51,24 @@ public class FramePage extends AbstractPage {
         return waitForElementVisible(driver.findElement(By.tagName("body"))).getText();
     }
 
+    public FramePage jumpIntoIframe() {
+        driver.switchTo().frame("mce_0_ifr");
+        return this;
+    }
+
     private List<WebElement> getLinks() {
-        return waitForElementVisible(driver.findElement(By.className("example"))).findElements(By.tagName("li"));
+        return waitForElementsVisible(By.cssSelector(".example li"), driver);
+    }
+
+    private WebElement findLink(String linkText) {
+        return getLinks().stream()
+                .filter(e -> e.getText().equals(linkText))
+                .findFirst()
+                .get();
+    }
+
+    private FramePage waitForIframeLoading() {
+        waitForElementVisible(driver.findElement(By.id("mceu_13")));
+        return this;
     }
 }
