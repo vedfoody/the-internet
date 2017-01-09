@@ -1,6 +1,7 @@
 package tests;
 
 import email.MyImap;
+import entities.Location;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -16,6 +17,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class MavenTest extends AbstractTest {
+
+    @Test(dependsOnGroups = "init", groups = "geolocation")
+    public void getGeolocation() {
+        GeolocationPage geolocationPage = PageFactory.initElements(driver, GeolocationPage.class);
+        Assert.assertTrue(geolocationPage.open().getLocation().equals(new Location(10f, 106f)));
+    }
 
     @Test(dependsOnGroups = "init", groups = "frame")
     public void jumpIntoNestedFrame() throws InterruptedException {

@@ -1,6 +1,7 @@
 package variables;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
@@ -16,4 +17,7 @@ public class GlobalVariables {
     public final static  String PASSWORD = "123456789!@#"; // TODO: 06/01/2017 should be passed on runtime
     public final static String SENDER = "no-reply@the-internet.herokuapp.com";
     public final static String FORGOT_PWD_SUBJECT = "Forgot Password from the-internet";
+
+    // geolocation
+    public final static Path GEOLOCATION_FILE = Paths.get(GlobalVariables.TEST_FOLDER.toString(), "geolocation.txt");
 }

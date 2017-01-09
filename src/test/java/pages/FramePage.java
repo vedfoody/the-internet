@@ -19,8 +19,6 @@ public class FramePage extends AbstractPage {
         driver.get(ROOT_URL + "/frames");
         waitForElementVisible(By.cssSelector(".example h3"), driver);
 
-
-
         return this;
     }
 
