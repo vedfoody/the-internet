@@ -1,5 +1,8 @@
 package tests;
 
+import com.google.gson.Gson;
+import entities.Geolocation;
+import entities.Location;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxBinary;
@@ -11,6 +14,7 @@ import variables.GlobalVariables;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 class AbstractTest {
 
@@ -19,7 +23,7 @@ class AbstractTest {
     private File testFolder = GlobalVariables.TEST_FOLDER;
 
     @Test(groups = "init")
-    protected void setup() {
+    protected void setup() throws IOException {
         initializeDriver();
         initENV();
     }
@@ -34,9 +38,13 @@ class AbstractTest {
         getFirefoxBrowser();
     }
 
-    private void initENV() {
+    private void initENV() throws IOException {
         // test folder
         testFolder.mkdir();
+
+        //geolocation
+        simulateGeoLocationProvider();
+
     }
 
     private void getFirefoxBrowser() {
@@ -55,6 +63,10 @@ class AbstractTest {
         profile.setPreference("browser.helperApps.neverAsk.saveToDisk", "application/octet-stream,images/jpeg");
         profile.setPreference("browser.download.manager.showAlertOnComplete", true);
 
+        profile.setPreference("geo.prompt.testing", true);
+        profile.setPreference("geo.prompt.testing.allow", true);
+        profile.setPreference("geo.wifi.uri", "file://" + GlobalVariables.GEOLOCATION_FILE.toString());
+
         return profile;
     }
 
@@ -62,5 +74,10 @@ class AbstractTest {
         FileUtils.deleteDirectory(testFolder);
     }
 
+    private void simulateGeoLocationProvider() throws IOException {
+        String content = new Gson().toJson(new Geolocation("OK", 10.0f, new Location(10f, 106f)));
 
+        Files.createFile(GlobalVariables.GEOLOCATION_FILE);
+        Files.write(GlobalVariables.GEOLOCATION_FILE, content.getBytes());
+    }
 }
