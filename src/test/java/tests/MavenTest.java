@@ -2,11 +2,14 @@ package tests;
 
 import email.MyImap;
 import entities.Location;
+import enums.CanvasProperty;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.*;
-import utilities.Sleeper;
 import variables.GlobalVariables;
 
 import javax.mail.MessagingException;
@@ -105,26 +108,9 @@ public class MavenTest extends AbstractTest {
                 "The modal dialog is not displayed after moving mouse out of viewport");
     }
 
-    @Test(enabled = false)
+    @Test(dependsOnGroups = "init", groups = {"canvas"})
     public void canvasTest() throws InterruptedException {
-//        driver.get("https://the-internet.herokuapp.com/challenging_dom");
-//        Thread.sleep(5000);
-//
-//        JavascriptExecutor executor = (JavascriptExecutor) driver;
-//        System.out.println(executor.executeScript("return arguments[0].getContext('2d')",
-//                driver.findElement(By.id("canvas"))));
-    }
-
-
-    @Test(enabled = false)
-    public void testInteractionOnContextMenu() throws InterruptedException {
-//        driver.get("https://the-internet.herokuapp.com/context_menu");
-//        Actions action = new Actions(driver);
-//        action.contextClick(new WebDriverWait(driver, 5)
-//                .until(ExpectedConditions.visibilityOf(driver.findElement(By.id("hot-spot"))))).sendKeys("t")
-//                .build().perform();
-//        Thread.sleep(3000);
-//        new WebDriverWait(driver, 5).until(ExpectedConditions.alertIsPresent()).accept();
-//        Thread.sleep(3000);
+        Assert.assertEquals(PageFactory.initElements(driver, ChallengingDOMPage.class)
+                .open().getCanvasProperty(CanvasProperty.FONT), "60px Arial");
     }
 }
