@@ -6,6 +6,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.*;
+import utilities.Sleeper;
 import variables.GlobalVariables;
 
 import javax.mail.MessagingException;
@@ -17,6 +18,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class MavenTest extends AbstractTest {
+
+    @Test(dependsOnGroups = "init", groups = "slider")
+    public void changeSliderValue() {
+        Assert.assertEquals(PageFactory.initElements(driver, SliderPage.class)
+                .open().changeValue(5).getSliderValue(), "5", "Slider value is not correct");
+    }
 
     @Test(dependsOnGroups = "init", groups = "geolocation")
     public void getGeolocation() {
