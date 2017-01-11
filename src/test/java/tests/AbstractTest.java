@@ -60,7 +60,9 @@ class AbstractTest {
 
         profile.setPreference("browser.download.dir", testFolder.toString());
         profile.setPreference("browser.download.folderList", 2);
-        profile.setPreference("browser.helperApps.neverAsk.saveToDisk", "application/octet-stream,images/jpeg");
+        profile.setPreference("browser.helperApps.neverAsk.saveToDisk",
+                "application/octet-stream,images/jpeg,application/pdf");
+        profile.setPreference("pdfjs.disabled", true);
         profile.setPreference("browser.download.manager.showAlertOnComplete", true);
 
         profile.setPreference("geo.prompt.testing", true);

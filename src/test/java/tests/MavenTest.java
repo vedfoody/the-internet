@@ -3,13 +3,11 @@ package tests;
 import email.MyImap;
 import entities.Location;
 import enums.CanvasProperty;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.*;
+import utilities.Wait;
 import variables.GlobalVariables;
 
 import javax.mail.MessagingException;
@@ -21,6 +19,20 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class MavenTest extends AbstractTest {
+
+    @Test(dependsOnGroups = "init", groups = "menu")
+    public void openMenu() {
+        PageFactory.initElements(driver, MenuPage.class).open().backToJQueryUI().waitForLoading();
+        Assert.assertFalse(driver.getCurrentUrl().contains("/jqueryui/menu"));
+    }
+
+    @Test(dependsOnGroups = "init", groups = "menu")
+    public void downloadPDF() throws InterruptedException {
+        PageFactory.initElements(driver, MenuPage.class).open().downloadPDF();
+        // already check file existence in wait method
+        // read pdf file should be handled later :(
+        Wait.waitForDownloadFile("menu");
+    }
 
     @Test(dependsOnGroups = "init", groups = "slider")
     public void changeSliderValue() {
@@ -37,7 +49,8 @@ public class MavenTest extends AbstractTest {
     @Test(dependsOnGroups = "init", groups = "frame")
     public void jumpIntoNestedFrame() throws InterruptedException {
         FramePage framePage = PageFactory.initElements(driver, FramePage.class);
-        Assert.assertEquals(framePage.open().goToNestedFramePage().jumpIntoTopFrame().jumpIntoLeftFrame().getBodyText(), "LEFT");
+        Assert.assertEquals(framePage.open().goToNestedFramePage().jumpIntoTopFrame().jumpIntoLeftFrame().getBodyText
+                (), "LEFT");
     }
 
     @Test(dependsOnGroups = "init", groups = "frame")
@@ -72,7 +85,8 @@ public class MavenTest extends AbstractTest {
         String fileName = "Read Me.txt";
         FileDownloadPage downloadPage = PageFactory.initElements(driver, FileDownloadPage.class);
 
-        Assert.assertTrue(downloadPage.open().download(fileName).getDownloadedFileContent(fileName).contains("You can " +
+        Assert.assertTrue(downloadPage.open().download(fileName).getDownloadedFileContent(fileName).contains("You can" +
+                " " +
                 "import *selection.json* back to the IcoMoon app using the *Import Icons* button (or via Main Menu → " +
                 "Manage Projects) to retrieve your icon selection."), "The content of downloaded file is not correct");
     }

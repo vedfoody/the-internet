@@ -4,6 +4,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import utilities.Wait;
 import variables.GlobalVariables;
 
 import java.io.File;
@@ -35,7 +36,7 @@ public class FileDownloadPage extends AbstractPage {
 
     public FileDownloadPage download(String fileName) throws InterruptedException {
         getDownloadLink(fileName).click();
-        waitForDownloadFile(fileName);
+        Wait.waitForDownloadFile(fileName);
 
         return this;
     }
@@ -47,26 +48,5 @@ public class FileDownloadPage extends AbstractPage {
             throw new RuntimeException("Can't read file named " + fileName);
         }
     }
-
-    private void waitForDownloadFile(String fileName) throws InterruptedException {
-        File[] files = testFolder.listFiles();
-
-        while(hasPartExtension(files) && isDownloaded(files, fileName)) {
-            System.out.println("Waiting for download files");
-            Thread.sleep(1000);
-
-            files = GlobalVariables.TEST_FOLDER.listFiles();
-        }
-    }
-
-    private boolean hasPartExtension(File[] files) {
-        return Stream.of(files).anyMatch(file -> FilenameUtils.getExtension(file.getName()).equalsIgnoreCase("part"));
-    }
-
-    private boolean isDownloaded(File[] files, String fileName) {
-        return Stream.of(files).anyMatch(file -> file.getName().equals(fileName));
-    }
-
-
 
 }
