@@ -3,6 +3,7 @@ package tests;
 import email.MyImap;
 import entities.Location;
 import enums.CanvasProperty;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -19,6 +20,30 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class MavenTest extends AbstractTest {
+
+    @Test(dependsOnGroups = "init", groups = "alert")
+    public void openJSAlert() {
+        JavaScriptAlertPage alertPage = PageFactory.initElements(driver, JavaScriptAlertPage.class);
+        alertPage.open().openJSAlert().accept();
+        Assert.assertEquals(alertPage.getResult(), "You successfuly clicked an alert");
+    }
+
+    @Test(dependsOnGroups = "init", groups = "alert")
+    public void openJSConfirmAlert() {
+        JavaScriptAlertPage alertPage = PageFactory.initElements(driver, JavaScriptAlertPage.class);
+        alertPage.open().openJSConfirmAlert().accept();
+        Assert.assertEquals(alertPage.getResult(),
+                "You clicked: Ok");
+    }
+
+    @Test(dependsOnGroups = "init", groups = "alert")
+    public void openJSPromptAlert() {
+        JavaScriptAlertPage alertPage = PageFactory.initElements(driver, JavaScriptAlertPage.class);
+        Alert alert = alertPage.open().openJSPromptAlert();
+        alert.sendKeys("openJSPromptAlert");
+        alert.accept();
+        Assert.assertEquals(alertPage.getResult(), "You entered: openJSPromptAlert");
+    }
 
     @Test(dependsOnGroups = "init", groups = "menu")
     public void openMenu() {
