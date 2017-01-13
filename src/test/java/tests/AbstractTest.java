@@ -8,6 +8,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.logging.LoggingPreferences;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 import variables.GlobalVariables;
@@ -15,6 +19,7 @@ import variables.GlobalVariables;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.logging.Level;
 
 class AbstractTest {
 
@@ -52,7 +57,14 @@ class AbstractTest {
 
         // TODO: 01/01/2017 get user home folder
         FirefoxBinary binaryFile = new FirefoxBinary(new File("/home/thuan/Downloads/firefox-46/firefox"));
-        driver = new FirefoxDriver(binaryFile, getFireFoxProfile());
+
+        LoggingPreferences logs = new LoggingPreferences();
+        logs.enable(LogType.BROWSER, Level.SEVERE);
+
+        DesiredCapabilities capabilities = DesiredCapabilities.firefox();
+        capabilities.setCapability(CapabilityType.LOGGING_PREFS, logs);
+
+        driver = new FirefoxDriver(binaryFile, getFireFoxProfile(), capabilities);
     }
 
     private FirefoxProfile getFireFoxProfile() {

@@ -4,10 +4,12 @@ import email.MyImap;
 import entities.Location;
 import enums.CanvasProperty;
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.*;
+import utilities.Sleeper;
 import utilities.Wait;
 import variables.GlobalVariables;
 
@@ -20,6 +22,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class MavenTest extends AbstractTest {
+
+    @Test(dependsOnGroups = "init", groups = "js-error")
+    public void getJSError() {
+        LogEntries entries = PageFactory.initElements(driver, JavaScriptErrorPage.class).open().getLogs();
+        Assert.assertEquals(entries.getAll().get(0).getMessage(), "TypeError: document.propertyThatDoesNotExist is undefined");
+    }
 
     @Test(dependsOnGroups = "init", groups = "alert")
     public void openJSAlert() {
