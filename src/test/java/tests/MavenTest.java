@@ -1,15 +1,16 @@
 package tests;
 
+import com.google.common.collect.Ordering;
 import email.MyImap;
 import entities.Location;
 import enums.CanvasProperty;
+import enums.SortType;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.*;
-import utilities.Sleeper;
 import utilities.Wait;
 import variables.GlobalVariables;
 
@@ -21,7 +22,21 @@ import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.Date;
 
+import static org.testng.Assert.assertTrue;
+
 public class MavenTest extends AbstractTest {
+
+    @Test(dependsOnGroups = "init", groups = "data-table")
+    public void sortTable() {
+        DataTablesPage dataTablesPage = PageFactory.initElements(driver, DataTablesPage.class);
+        dataTablesPage.open();
+
+        assertTrue(Ordering.natural().isOrdered(dataTablesPage.sortFirstTable("Last Name", SortType.DOWN)
+                .getFirstTableCol(1)), "Col in table 1 has not been sorted");
+
+        assertTrue(Ordering.natural().reverse().isOrdered(dataTablesPage.sortSecondTable("Last Name", SortType.UP)
+                .getSecondTableCol(1)), "Col in table 2 has not been sorted");
+    }
 
     @Test(dependsOnGroups = "init", groups = "js-error")
     public void getJSError() {
@@ -76,7 +91,7 @@ public class MavenTest extends AbstractTest {
     @Test(dependsOnGroups = "init", groups = "geolocation")
     public void getGeolocation() {
         GeolocationPage geolocationPage = PageFactory.initElements(driver, GeolocationPage.class);
-        Assert.assertTrue(geolocationPage.open().getLocation().equals(new Location(10f, 106f)));
+        assertTrue(geolocationPage.open().getLocation().equals(new Location(10f, 106f)));
     }
 
     @Test(dependsOnGroups = "init", groups = "frame")
@@ -118,40 +133,39 @@ public class MavenTest extends AbstractTest {
         String fileName = "Read Me.txt";
         FileDownloadPage downloadPage = PageFactory.initElements(driver, FileDownloadPage.class);
 
-        Assert.assertTrue(downloadPage.open().download(fileName).getDownloadedFileContent(fileName).contains("You can" +
+        assertTrue(downloadPage.open().download(fileName).getDownloadedFileContent(fileName).contains("You can" +
                 " " +
                 "import *selection.json* back to the IcoMoon app using the *Import Icons* button (or via Main Menu → " +
                 "Manage Projects) to retrieve your icon selection."), "The content of downloaded file is not correct");
     }
 
-    @Test(groups = {"dynamic-content"})
+    @Test(dependsOnGroups = "init", groups = {"dynamic-content"})
     public void checkDynamicIMG() {
-        System.out.println("checkDynamicIMG");
         DynamicContentPage page = PageFactory.initElements(driver, DynamicContentPage.class);
         String imgBeforeRefresh = page.open().getSourceFile(0);
         Assert.assertFalse(page.open().getSourceFile(0).equals(imgBeforeRefresh),
                 "The img is not changed after refresh ");
     }
 
-    @Test(groups = {"dynamic-controls"})
+    @Test(dependsOnGroups = "init", groups = {"dynamic-controls"})
     public void checkDynamicControls() {
         DynamicControlsPage page = PageFactory.initElements(driver, DynamicControlsPage.class);
-        Assert.assertTrue(page.open().isCheckboxDisplayed(), "The checkbox is not displayed after opening page");
+        assertTrue(page.open().isCheckboxDisplayed(), "The checkbox is not displayed after opening page");
         Assert.assertFalse(page.removeCheckbox().waitLoadingProgress().isCheckboxDisplayed(),
                 "The checkbox has not been removed");
     }
 
-    @Test(groups = {"dynamically-loaded"})
+    @Test(dependsOnGroups = "init", groups = {"dynamically-loaded"})
     public void checkDynamicLoading() {
         Assert.assertEquals(PageFactory.initElements(driver, DynamicallyLoadedPage.class).open().openExample(1)
                 .startWaitingProcess().getFinishedText(), "Hello World!");
     }
 
-    @Test(groups = {"exit-intent"})
+    @Test(dependsOnGroups = "init", groups = {"exit-intent"})
     public void checkMovingMouseToOutOfViewport() throws AWTException, InterruptedException {
         ExitIntentPage page = PageFactory.initElements(driver, ExitIntentPage.class);
         page.open().moveToOutOfViewport();
-        Assert.assertTrue(page.isModalDialogVisible(),
+        assertTrue(page.isModalDialogVisible(),
                 "The modal dialog is not displayed after moving mouse out of viewport");
     }
 
