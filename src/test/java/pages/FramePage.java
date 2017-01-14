@@ -55,7 +55,7 @@ public class FramePage extends AbstractPage {
     }
 
     private List<WebElement> getLinks() {
-        return waitForElementsVisible(By.cssSelector(".example li"), driver);
+        return waitForAllElementsVisible(By.cssSelector(".example li"), driver);
     }
 
     private WebElement findLink(String linkText) {

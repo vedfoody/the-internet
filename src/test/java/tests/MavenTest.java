@@ -2,10 +2,15 @@ package tests;
 
 import email.MyImap;
 import entities.Location;
+import enums.CanvasProperty;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.*;
+import utilities.Sleeper;
+import utilities.Wait;
 import variables.GlobalVariables;
 
 import javax.mail.MessagingException;
@@ -18,6 +23,56 @@ import java.util.Date;
 
 public class MavenTest extends AbstractTest {
 
+    @Test(dependsOnGroups = "init", groups = "js-error")
+    public void getJSError() {
+        LogEntries entries = PageFactory.initElements(driver, JavaScriptErrorPage.class).open().getLogs();
+        Assert.assertEquals(entries.getAll().get(0).getMessage(), "TypeError: document.propertyThatDoesNotExist is undefined");
+    }
+
+    @Test(dependsOnGroups = "init", groups = "alert")
+    public void openJSAlert() {
+        JavaScriptAlertPage alertPage = PageFactory.initElements(driver, JavaScriptAlertPage.class);
+        alertPage.open().openJSAlert().accept();
+        Assert.assertEquals(alertPage.getResult(), "You successfuly clicked an alert");
+    }
+
+    @Test(dependsOnGroups = "init", groups = "alert")
+    public void openJSConfirmAlert() {
+        JavaScriptAlertPage alertPage = PageFactory.initElements(driver, JavaScriptAlertPage.class);
+        alertPage.open().openJSConfirmAlert().accept();
+        Assert.assertEquals(alertPage.getResult(),
+                "You clicked: Ok");
+    }
+
+    @Test(dependsOnGroups = "init", groups = "alert")
+    public void openJSPromptAlert() {
+        JavaScriptAlertPage alertPage = PageFactory.initElements(driver, JavaScriptAlertPage.class);
+        Alert alert = alertPage.open().openJSPromptAlert();
+        alert.sendKeys("openJSPromptAlert");
+        alert.accept();
+        Assert.assertEquals(alertPage.getResult(), "You entered: openJSPromptAlert");
+    }
+
+    @Test(dependsOnGroups = "init", groups = "menu")
+    public void openMenu() {
+        PageFactory.initElements(driver, MenuPage.class).open().backToJQueryUI().waitForLoading();
+        Assert.assertFalse(driver.getCurrentUrl().contains("/jqueryui/menu"));
+    }
+
+    @Test(dependsOnGroups = "init", groups = "menu")
+    public void downloadPDF() throws InterruptedException {
+        PageFactory.initElements(driver, MenuPage.class).open().downloadPDF();
+        // already check file existence in wait method
+        // read pdf file should be handled later :(
+        Wait.waitForDownloadFile("menu");
+    }
+
+    @Test(dependsOnGroups = "init", groups = "slider")
+    public void changeSliderValue() {
+        Assert.assertEquals(PageFactory.initElements(driver, SliderPage.class)
+                .open().changeValue(5).getSliderValue(), "5", "Slider value is not correct");
+    }
+
     @Test(dependsOnGroups = "init", groups = "geolocation")
     public void getGeolocation() {
         GeolocationPage geolocationPage = PageFactory.initElements(driver, GeolocationPage.class);
@@ -27,7 +82,8 @@ public class MavenTest extends AbstractTest {
     @Test(dependsOnGroups = "init", groups = "frame")
     public void jumpIntoNestedFrame() throws InterruptedException {
         FramePage framePage = PageFactory.initElements(driver, FramePage.class);
-        Assert.assertEquals(framePage.open().goToNestedFramePage().jumpIntoTopFrame().jumpIntoLeftFrame().getBodyText(), "LEFT");
+        Assert.assertEquals(framePage.open().goToNestedFramePage().jumpIntoTopFrame().jumpIntoLeftFrame().getBodyText
+                (), "LEFT");
     }
 
     @Test(dependsOnGroups = "init", groups = "frame")
@@ -62,7 +118,8 @@ public class MavenTest extends AbstractTest {
         String fileName = "Read Me.txt";
         FileDownloadPage downloadPage = PageFactory.initElements(driver, FileDownloadPage.class);
 
-        Assert.assertTrue(downloadPage.open().download(fileName).getDownloadedFileContent(fileName).contains("You can " +
+        Assert.assertTrue(downloadPage.open().download(fileName).getDownloadedFileContent(fileName).contains("You can" +
+                " " +
                 "import *selection.json* back to the IcoMoon app using the *Import Icons* button (or via Main Menu → " +
                 "Manage Projects) to retrieve your icon selection."), "The content of downloaded file is not correct");
     }
@@ -98,26 +155,9 @@ public class MavenTest extends AbstractTest {
                 "The modal dialog is not displayed after moving mouse out of viewport");
     }
 
-    @Test(enabled = false)
+    @Test(dependsOnGroups = "init", groups = {"canvas"})
     public void canvasTest() throws InterruptedException {
-//        driver.get("https://the-internet.herokuapp.com/challenging_dom");
-//        Thread.sleep(5000);
-//
-//        JavascriptExecutor executor = (JavascriptExecutor) driver;
-//        System.out.println(executor.executeScript("return arguments[0].getContext('2d')",
-//                driver.findElement(By.id("canvas"))));
-    }
-
-
-    @Test(enabled = false)
-    public void testInteractionOnContextMenu() throws InterruptedException {
-//        driver.get("https://the-internet.herokuapp.com/context_menu");
-//        Actions action = new Actions(driver);
-//        action.contextClick(new WebDriverWait(driver, 5)
-//                .until(ExpectedConditions.visibilityOf(driver.findElement(By.id("hot-spot"))))).sendKeys("t")
-//                .build().perform();
-//        Thread.sleep(3000);
-//        new WebDriverWait(driver, 5).until(ExpectedConditions.alertIsPresent()).accept();
-//        Thread.sleep(3000);
+        Assert.assertEquals(PageFactory.initElements(driver, ChallengingDOMPage.class)
+                .open().getCanvasProperty(CanvasProperty.FONT), "60px Arial");
     }
 }

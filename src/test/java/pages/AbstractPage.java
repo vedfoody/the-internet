@@ -8,12 +8,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
-abstract class AbstractPage {
+public abstract class AbstractPage {
 
-    final static int TIME_OUT_FOR_LOADING_ELEMENT = 90;
-    final static int TIME_OUT_FOR_DOWNLOAD_FILE = 90;
+    public final static int TIME_OUT_FOR_LOADING_ELEMENT = 90;
+    public final static int TIME_OUT_FOR_DOWNLOAD_FILE = 90;
 
-    final static String ROOT_URL = "https://the-internet.herokuapp.com";
+    public final static String ROOT_URL = "https://the-internet.herokuapp.com";
 
     WebDriver driver;
 
@@ -45,7 +45,7 @@ abstract class AbstractPage {
                 });
     }
 
-    protected List<WebElement> waitForElementsVisible(By locator, SearchContext context) {
+    protected List<WebElement> waitForAllElementsVisible(By locator, SearchContext context) {
         return new WebDriverWait(driver, TIME_OUT_FOR_LOADING_ELEMENT)
                 .until(new ExpectedCondition<List<WebElement>>() {
                     @Override
