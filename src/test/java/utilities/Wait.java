@@ -5,6 +5,7 @@ import org.openqa.selenium.TimeoutException;
 import variables.GlobalVariables;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import static pages.AbstractPage.TIME_OUT_FOR_DOWNLOAD_FILE;
@@ -20,8 +21,8 @@ public class Wait {
         int actualWaitTime = 1;
         while(actualWaitTime <= TIME_OUT_FOR_DOWNLOAD_FILE) {
 
-            if(hasPartExtension(files) && isDownloaded(files, fileName))
-                break;
+            if(isDownloaded(new File(Paths.get(testFolder.toString(), fileName).toString())) && !hasPartExtension(files))
+                return;
 
             System.out.println("Waiting for download files ... " + actualWaitTime + "s");
             Sleeper.sleep(1);
@@ -36,7 +37,7 @@ public class Wait {
         return Stream.of(files).anyMatch(file -> FilenameUtils.getExtension(file.getName()).equalsIgnoreCase("part"));
     }
 
-    private static boolean isDownloaded(File[] files, String fileName) {
-        return Stream.of(files).anyMatch(file -> file.getName().equals(fileName));
+    private static boolean isDownloaded(File file) {
+        return file.exists() && !file.isDirectory();
     }
 }

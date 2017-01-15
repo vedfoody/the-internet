@@ -5,6 +5,7 @@ import email.MyImap;
 import entities.Location;
 import enums.CanvasProperty;
 import enums.SortType;
+import org.apache.http.HttpResponse;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.support.PageFactory;
@@ -22,9 +23,21 @@ import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.Date;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 public class MavenTest extends AbstractTest {
+
+    @Test(dependsOnGroups = "init", groups = "secure-download")
+    public void secureDownload() throws IOException {
+        SecureDownloadPage downloadPage = PageFactory.initElements(driver, SecureDownloadPage.class);
+        String link = downloadPage
+                .openWithBaiscAuth(GlobalVariables.USERNAME, GlobalVariables.PASSWORD).getDownloadLink("snip.PNG");
+
+        HttpResponse response = downloadPage.getDownloadLinkData(link);
+        assertEquals(response.getFirstHeader("Content-Length").getValue(), "4637");
+        assertEquals(response.getFirstHeader("Content-Type").getValue(), "application/octet-stream");
+    }
 
     @Test(dependsOnGroups = "init", groups = "data-table")
     public void sortTable() {
@@ -79,7 +92,7 @@ public class MavenTest extends AbstractTest {
         PageFactory.initElements(driver, MenuPage.class).open().downloadPDF();
         // already check file existence in wait method
         // read pdf file should be handled later :(
-        Wait.waitForDownloadFile("menu");
+        Wait.waitForDownloadFile("menu.pdf");
     }
 
     @Test(dependsOnGroups = "init", groups = "slider")
@@ -115,7 +128,7 @@ public class MavenTest extends AbstractTest {
         System.out.println("Current time is: " + now.toString());
         PageFactory.initElements(driver, ForgotPasswordPage.class).open().retrievePassword(GlobalVariables.TEST_EMAIL);
 
-        new MyImap(GlobalVariables.HOST, GlobalVariables.USERNAME, GlobalVariables.PASSWORD)
+        new MyImap(GlobalVariables.HOST, GlobalVariables.EMAIL, GlobalVariables.EMAIL_PASSWORD)
                 .getMessageWithRetry(now, 10);
     }
 
