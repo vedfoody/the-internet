@@ -6,6 +6,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import static utilities.Wait.waitForAllElementsVisible;
+import static utilities.Wait.waitForElementVisible;
+
 /**
  * Created by thuan on 12/01/2017.
  */
@@ -39,11 +42,11 @@ public class JavaScriptAlertPage extends AbstractPage {
     }
 
     public String getResult() {
-        return waitForElementVisible(result).getText();
+        return waitForElementVisible(driver, result).getText();
     }
 
     private WebElement getButtonByCaption(String caption) {
-        return waitForAllElementsVisible(By.cssSelector(".example button"), driver)
+        return waitForAllElementsVisible(driver, By.cssSelector(".example button"), driver)
                 .stream().filter(e -> e.getText().equals(caption)).findFirst().get();
     }
 }

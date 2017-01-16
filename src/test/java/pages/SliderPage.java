@@ -8,6 +8,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import utilities.Sleeper;
 
+import static utilities.Wait.waitForElementVisible;
+
 /**
  * Created by thuan on 10/01/2017.
  */
@@ -52,6 +54,6 @@ public class SliderPage extends AbstractPage {
     }
 
     public String getSliderValue() {
-        return waitForElementVisible(sliderValue).getText();
+        return waitForElementVisible(driver, sliderValue).getText();
     }
 }

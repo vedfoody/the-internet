@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static utilities.Wait.waitForElementVisible;
+
 /**
  * Created by thuan on 11/01/2017.
  */
@@ -32,7 +34,7 @@ public class MenuPage extends AbstractPage {
     }
 
     public MenuPage waitForLoading() {
-        waitForElementVisible(By.cssSelector(".example h3"), driver);
+        waitForElementVisible(driver, By.cssSelector(".example h3"), driver);
         return this;
     }
 

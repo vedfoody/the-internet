@@ -28,6 +28,11 @@ import static org.testng.Assert.assertTrue;
 
 public class MavenTest extends AbstractTest {
 
+    @Test(dependsOnGroups = "init", groups = "status-code")
+    public void getStatusCode() throws IOException {
+        assertEquals(PageFactory.initElements(driver, StatusCodePage.class).open().accessStatusCodeLink("404"), 404);
+    }
+
     @Test(dependsOnGroups = "init", groups = "secure-download")
     public void secureDownload() throws IOException {
         SecureDownloadPage downloadPage = PageFactory.initElements(driver, SecureDownloadPage.class);
@@ -44,11 +49,17 @@ public class MavenTest extends AbstractTest {
         DataTablesPage dataTablesPage = PageFactory.initElements(driver, DataTablesPage.class);
         dataTablesPage.open();
 
-        assertTrue(Ordering.natural().isOrdered(dataTablesPage.sortFirstTable("Last Name", SortType.DOWN)
-                .getFirstTableCol(1)), "Col in table 1 has not been sorted");
+        assertTrue(Ordering.natural().isOrdered(
+                dataTablesPage.getFirstTable()
+                        .sortCol("Last Name", SortType.DOWN)
+                        .getColValues(1)),
+                "Col in table 1 has not been sorted");
 
-        assertTrue(Ordering.natural().reverse().isOrdered(dataTablesPage.sortSecondTable("Last Name", SortType.UP)
-                .getSecondTableCol(1)), "Col in table 2 has not been sorted");
+        assertTrue(Ordering.natural().reverse().isOrdered(
+                dataTablesPage.getSecondTable()
+                        .sortCol("Last Name", SortType.UP)
+                        .getColValues(1)),
+                "Col in table 2 has not been sorted");
     }
 
     @Test(dependsOnGroups = "init", groups = "js-error")

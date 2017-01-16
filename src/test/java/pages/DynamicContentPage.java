@@ -8,6 +8,8 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import static utilities.Wait.TIME_OUT_FOR_LOADING_ELEMENT;
+
 public class DynamicContentPage extends AbstractPage {
 
     @FindBy(css = ".large-2 img")

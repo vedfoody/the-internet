@@ -1,13 +1,16 @@
 package pages;
 
-import java.util.concurrent.TimeUnit;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
+
+import java.util.concurrent.TimeUnit;
+
+import static utilities.Wait.TIME_OUT_FOR_LOADING_ELEMENT;
+import static utilities.Wait.isElementPresent;
 
 public class DynamicControlsPage extends AbstractPage {
 
@@ -38,7 +41,7 @@ public class DynamicControlsPage extends AbstractPage {
     }
 
     public boolean isCheckboxDisplayed() {
-        return isElementPresent(By.id("checkbox"));
+        return isElementPresent(driver, By.id("checkbox"));
     }
 
     private WebElement getActionButton() {
