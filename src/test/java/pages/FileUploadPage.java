@@ -6,8 +6,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
-import java.io.File;
 import java.nio.file.Path;
+
+import static utilities.Wait.waitForElementVisible;
 
 /**
  * Created by thuan on 04/01/2017.
@@ -27,14 +28,14 @@ public class FileUploadPage extends AbstractPage {
     }
 
     public FileUploadPage uploadFile(Path filePath) {
-        waitForElementVisible(driver.findElement(By.id("file-upload"))).sendKeys(filePath.toString());
-        waitForElementVisible(submitButton).click();
+        waitForElementVisible(driver, driver.findElement(By.id("file-upload"))).sendKeys(filePath.toString());
+        waitForElementVisible(driver, submitButton).click();
 
         return this;
     }
 
     public void checkUploadedFile(String uploadedFileName) {
-        Assert.assertEquals(waitForElementVisible(driver.findElement(By.id("uploaded-files"))).getText(),
+        Assert.assertEquals(waitForElementVisible(driver, driver.findElement(By.id("uploaded-files"))).getText(),
                 uploadedFileName, uploadedFileName + " is not uploaded");
     }
 }

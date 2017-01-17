@@ -75,7 +75,7 @@ class AbstractTest {
         profile.setPreference("browser.helperApps.neverAsk.saveToDisk",
                 "application/octet-stream,images/jpeg,application/pdf");
         profile.setPreference("pdfjs.disabled", true);
-        profile.setPreference("browser.download.manager.showAlertOnComplete", true);
+//        profile.setPreference("browser.download.manager.showAlertOnComplete", false);
 
         profile.setPreference("geo.prompt.testing", true);
         profile.setPreference("geo.prompt.testing.allow", true);

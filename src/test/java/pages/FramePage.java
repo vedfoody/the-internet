@@ -6,6 +6,9 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static utilities.Wait.waitForAllElementsVisible;
+import static utilities.Wait.waitForElementVisible;
+
 /**
  * Created by thuan on 06/01/2017.
  */
@@ -17,7 +20,7 @@ public class FramePage extends AbstractPage {
 
     public FramePage open() {
         driver.get(ROOT_URL + "/frames");
-        waitForElementVisible(By.cssSelector(".example h3"), driver);
+        waitForElementVisible(driver, By.cssSelector(".example h3"), driver);
 
         return this;
     }
@@ -36,17 +39,18 @@ public class FramePage extends AbstractPage {
     }
 
     public FramePage jumpIntoLeftFrame() {
-        driver.switchTo().frame(waitForElementVisible(By.cssSelector("frame[src='/frame_left']"), driver));
+        driver.switchTo().frame(waitForElementVisible(driver, By.cssSelector("frame[src='/frame_left']"), driver));
         return this;
     }
 
     public FramePage jumpIntoTopFrame() {
-        driver.switchTo().frame(waitForElementVisible(driver.findElement(By.cssSelector("frame[src='/frame_top']"))));
+        driver.switchTo().frame(waitForElementVisible(driver, driver.findElement(By.cssSelector
+                ("frame[src='/frame_top']"))));
         return this;
     }
 
     public String getBodyText() {
-        return waitForElementVisible(driver.findElement(By.tagName("body"))).getText();
+        return waitForElementVisible(driver, driver.findElement(By.tagName("body"))).getText();
     }
 
     public FramePage jumpIntoIframe() {
@@ -55,7 +59,7 @@ public class FramePage extends AbstractPage {
     }
 
     private List<WebElement> getLinks() {
-        return waitForAllElementsVisible(By.cssSelector(".example li"), driver);
+        return waitForAllElementsVisible(driver, By.cssSelector(".example li"), driver);
     }
 
     private WebElement findLink(String linkText) {
@@ -66,7 +70,7 @@ public class FramePage extends AbstractPage {
     }
 
     private FramePage waitForIframeLoading() {
-        waitForElementVisible(driver.findElement(By.id("mceu_13")));
+        waitForElementVisible(driver, driver.findElement(By.id("mceu_13")));
         return this;
     }
 }

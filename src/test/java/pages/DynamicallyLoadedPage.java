@@ -5,6 +5,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import static utilities.Wait.waitForElementPresent;
+import static utilities.Wait.waitForElementVisible;
+
 public class DynamicallyLoadedPage extends AbstractPage {
 
     @FindBy(css = "#start button")
@@ -25,12 +28,12 @@ public class DynamicallyLoadedPage extends AbstractPage {
     }
 
     public DynamicallyLoadedPage startWaitingProcess() {
-        waitForElementVisible(startButton).click();
+        waitForElementVisible(driver, startButton).click();
         return this;
     }
 
     public String getFinishedText() {
-        return waitForElementPresent(By.cssSelector("#finish[style=''] h4")).getText();
+        return waitForElementPresent(driver, By.cssSelector("#finish[style=''] h4")).getText();
     }
 
 }

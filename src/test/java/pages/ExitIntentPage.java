@@ -1,11 +1,13 @@
 package pages;
 
-import java.awt.AWTException;
-import java.awt.Robot;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
+import java.awt.*;
+
+import static utilities.Wait.isElementPresent;
+import static utilities.Wait.waitForElementVisible;
 
 public class ExitIntentPage extends AbstractPage {
 
@@ -19,7 +21,7 @@ public class ExitIntentPage extends AbstractPage {
     }
 
     public ExitIntentPage moveToOutOfViewport() throws AWTException, InterruptedException {
-        WebElement header = waitForElementVisible(driver.findElement(By.cssSelector(".example h3")));
+        WebElement header = waitForElementVisible(driver, driver.findElement(By.cssSelector(".example h3")));
         Robot robot = new Robot();
         robot.mouseMove(header.getLocation().getX(), header.getLocation().getY());
         Thread.sleep(2000);
@@ -28,7 +30,7 @@ public class ExitIntentPage extends AbstractPage {
     }
 
     public boolean isModalDialogVisible() {
-        return isElementPresent(By.className("modal"));
+        return isElementPresent(driver, By.className("modal"));
     }
 
 }
