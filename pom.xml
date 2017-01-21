@@ -4,6 +4,10 @@
     <artifactId>the.internet</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
+    <properties>
+        <suite>firefox_suite.xml</suite>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
@@ -54,9 +58,9 @@
                 <artifactId>maven-surfire-plugin</artifactId>
                 <version>2.19.1</version>
                 <configuration>
-                    <systemPropertyVariables>
-                        <browser>firefox</browser>
-                    </systemPropertyVariables>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/firefox_suite.xml</suiteXmlFile>
+                    </suiteXmlFiles>
                 </configuration>
             </plugin>
         </plugins>
