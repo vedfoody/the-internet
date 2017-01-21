@@ -15,13 +15,20 @@ import java.nio.file.Paths;
  */
 public class Screenshot {
     public static void takeScreenShot(WebDriver driver, String name, Class<?> clazz) {
+        takeScreenshot(driver, new File(Paths.get(GlobalVariables.LOG_FOLDER.toString(), "Screenshots",
+                clazz.getSimpleName(), name + ".png").toString()));
+    }
+
+    public static void takeScreenShotOnFailure(WebDriver driver, String name, Class<?> clazz) {
+        takeScreenshot(driver, new File(Paths.get(GlobalVariables.LOG_FOLDER.toString(), "Failures",
+                clazz.getSimpleName(), name + ".png").toString()));
+    }
+
+    private static void takeScreenshot(WebDriver driver, File file) {
         File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         try {
-            File realScreenshot = new File(Paths.get(GlobalVariables.LOG_FOLDER.toString(),
-                    clazz.getSimpleName(), name + ".png").toString());
-
-            FileUtils.forceMkdir(realScreenshot.getParentFile());
-            FileUtils.copyFile(screenshot, realScreenshot);
+            FileUtils.forceMkdir(file.getParentFile());
+            FileUtils.copyFile(screenshot, file);
         } catch (IOException e) {
             System.out.println("ERROR: " + e.getMessage());
         }

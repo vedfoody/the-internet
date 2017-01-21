@@ -30,6 +30,7 @@ public class MavenTest extends AbstractTest {
 
     @Test(dependsOnGroups = "init", groups = "status-code")
     public void getStatusCode() throws IOException {
+        PageFactory.initElements(driver, StatusCodePage.class).open();
         assertEquals(PageFactory.initElements(driver, StatusCodePage.class).open().accessStatusCodeLink("404"), 404);
     }
 

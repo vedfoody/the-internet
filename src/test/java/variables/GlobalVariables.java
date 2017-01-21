@@ -24,4 +24,9 @@ public class GlobalVariables {
     // login
     public final static String USERNAME = "admin";
     public final static String PASSWORD = "admin";
+
+    // log files
+//    public final static File LOG_FOLDER = new File(Paths.get(System.getProperty("user.home"), "selenium_log").toString());
+    public final static File LOG_FOLDER = new File(System.getProperty("maven.project.build.directory", "./target/"));
+
 }

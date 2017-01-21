@@ -3,6 +3,7 @@ package tests;
 import com.google.gson.Gson;
 import entities.Geolocation;
 import entities.Location;
+import listeners.MyTestListener;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxBinary;
@@ -13,6 +14,7 @@ import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import variables.GlobalVariables;
 
@@ -21,11 +23,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.logging.Level;
 
-class AbstractTest {
+
+@Listeners(MyTestListener.class)
+
+public class AbstractTest {
 
     protected WebDriver driver;
 
     private File testFolder = GlobalVariables.TEST_FOLDER;
+    private File logFolder = GlobalVariables.LOG_FOLDER;
 
     @Test(groups = "init")
     protected void setup() throws IOException {
@@ -39,6 +45,10 @@ class AbstractTest {
         deleteTestFolder();
     }
 
+    public WebDriver getDriver() {
+        return driver;
+    }
+
     private void initializeDriver() {
         getFirefoxBrowser();
     }
@@ -47,8 +57,11 @@ class AbstractTest {
         // test folder
         testFolder.mkdir();
 
-        //geolocation
+        // geolocation
         simulateGeoLocationProvider();
+
+        // log folder
+        logFolder.mkdir();
 
     }
 
