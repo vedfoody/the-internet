@@ -1,8 +1,5 @@
-package tests;
+package tests.Abstract;
 
-import com.google.gson.Gson;
-import entities.Geolocation;
-import entities.Location;
 import listeners.MyTestListener;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.WebDriver;
@@ -14,13 +11,14 @@ import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
-import org.testng.annotations.Test;
+import org.testng.annotations.Optional;
+import org.testng.annotations.Parameters;
 import variables.GlobalVariables;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.logging.Level;
 
 
@@ -31,11 +29,19 @@ public class AbstractTest {
     protected WebDriver driver;
 
     private File testFolder = GlobalVariables.TEST_FOLDER;
-    private File logFolder = GlobalVariables.LOG_FOLDER;
 
-    @Test(groups = "init")
-    protected void setup() throws IOException {
-        initializeDriver();
+    public final WebDriver getDriver() {
+        return driver;
+    }
+
+    @Parameters("browser")
+    @BeforeClass(alwaysRun = true, groups = "init")
+    protected void setup(@Optional("firefox") String browser) throws IOException {
+        if(browser.equals("firefox"))
+            getFirefoxDriver();
+        else if(browser.equals("chrome"))
+            getChromeDriver();
+
         initENV();
     }
 
@@ -45,31 +51,19 @@ public class AbstractTest {
         deleteTestFolder();
     }
 
-    public WebDriver getDriver() {
-        return driver;
-    }
-
-    private void initializeDriver() {
-        getFirefoxBrowser();
-    }
-
-    private void initENV() throws IOException {
+    protected void initENV() throws IOException {
         // test folder
         testFolder.mkdir();
-
-        // geolocation
-        simulateGeoLocationProvider();
-
-        // log folder
-        logFolder.mkdir();
-
     }
 
-    private void getFirefoxBrowser() {
+    private void getChromeDriver(){
+        // initialize chrome driver
+    }
+
+    private void getFirefoxDriver() {
         System.out.println("The test is using firefox browser");
 
-        // TODO: 01/01/2017 get user home folder
-        FirefoxBinary binaryFile = new FirefoxBinary(new File("/home/thuan/Downloads/firefox-46/firefox"));
+        FirefoxBinary binaryFile = new FirefoxBinary(new File(System.getProperty("binaryFile")));
 
         LoggingPreferences logs = new LoggingPreferences();
         logs.enable(LogType.BROWSER, Level.SEVERE);
@@ -99,12 +93,5 @@ public class AbstractTest {
 
     private void deleteTestFolder() throws IOException {
         FileUtils.deleteDirectory(testFolder);
-    }
-
-    private void simulateGeoLocationProvider() throws IOException {
-        String content = new Gson().toJson(new Geolocation("OK", 10.0f, new Location(10f, 106f)));
-
-        Files.createFile(GlobalVariables.GEOLOCATION_FILE);
-        Files.write(GlobalVariables.GEOLOCATION_FILE, content.getBytes());
     }
 }

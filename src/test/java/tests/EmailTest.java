@@ -4,6 +4,7 @@ import email.MyImap;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.annotations.Test;
 import pages.ForgotPasswordPage;
+import tests.Abstract.AbstractTest;
 import variables.GlobalVariables;
 
 import javax.mail.MessagingException;
@@ -15,7 +16,7 @@ import java.util.Date;
  */
 public class EmailTest extends AbstractTest {
 
-    @Test(dependsOnGroups = "init", groups = "forgot-password")
+    @Test(groups = "forgot-password")
     public void sendForgotPasswordEmail() throws MessagingException, InterruptedException {
         Date now = Calendar.getInstance().getTime();
 

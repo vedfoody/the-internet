@@ -4,6 +4,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.MenuPage;
+import tests.Abstract.AbstractTest;
 import utilities.Wait;
 
 /**
@@ -11,13 +12,13 @@ import utilities.Wait;
  */
 public class MenuTest extends AbstractTest {
 
-    @Test(dependsOnGroups = "init", groups = "menu")
+    @Test(groups = "menu")
     public void openMenu() {
         PageFactory.initElements(driver, MenuPage.class).open().backToJQueryUI().waitForLoading();
         Assert.assertFalse(driver.getCurrentUrl().contains("/jqueryui/menu"));
     }
 
-    @Test(dependsOnGroups = "init", groups = "menu")
+    @Test(groups = "menu")
     public void downloadPDF() throws InterruptedException {
         PageFactory.initElements(driver, MenuPage.class).open().downloadPDF();
         // already check file existence in wait method

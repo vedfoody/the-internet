@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="firefox-suite">
+    <parameter name="browser" value="firefox"/>
+    <test name="test-1">
+        <!--<classes>-->
+            <!--<class name="tests.StatusCodeTest"/>-->
+        <!--</classes>-->
+
+        <packages>
+            <package name="tests"/>
+        </packages>
+    </test>
+</suite>

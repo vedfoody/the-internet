@@ -2,7 +2,7 @@ package listeners;
 
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
-import tests.AbstractTest;
+import tests.Abstract.AbstractTest;
 import utilities.Screenshot;
 
 /**

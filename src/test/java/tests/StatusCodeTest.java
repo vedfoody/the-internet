@@ -3,6 +3,7 @@ package tests;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.annotations.Test;
 import pages.StatusCodePage;
+import tests.Abstract.AbstractTest;
 
 import java.io.IOException;
 
@@ -13,7 +14,7 @@ import static org.testng.Assert.assertEquals;
  */
 public class StatusCodeTest extends AbstractTest {
 
-    @Test(dependsOnGroups = "init", groups = "status-code")
+    @Test(groups = "status-code")
     public void getStatusCode() throws IOException {
         PageFactory.initElements(driver, StatusCodePage.class).open();
         assertEquals(PageFactory.initElements(driver, StatusCodePage.class).open()

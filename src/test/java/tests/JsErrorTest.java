@@ -5,10 +5,11 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.JavaScriptErrorPage;
+import tests.Abstract.AbstractTest;
 
 public class JsErrorTest extends AbstractTest {
 
-    @Test(dependsOnGroups = "init", groups = "js-error")
+    @Test(groups = "js-error")
     public void getJSError() {
         LogEntries entries = PageFactory.initElements(driver, JavaScriptErrorPage.class).open().getLogs();
         Assert.assertEquals(entries.getAll().get(0).getMessage(),

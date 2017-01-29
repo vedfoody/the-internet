@@ -5,9 +5,8 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.annotations.Test;
 import pages.FileDownloadPage;
 import pages.FileUploadPage;
-import pages.MenuPage;
 import pages.SecureDownloadPage;
-import utilities.Wait;
+import tests.Abstract.AbstractTest;
 import variables.GlobalVariables;
 
 import java.io.IOException;
@@ -22,7 +21,7 @@ import static org.testng.Assert.assertTrue;
  */
 public class DownloadTests extends AbstractTest {
 
-    @Test(dependsOnGroups = "init", groups = "secure-download")
+    @Test(groups = "secure-download")
     public void secureDownload() throws IOException {
         SecureDownloadPage downloadPage = PageFactory.initElements(driver, SecureDownloadPage.class);
         String link = downloadPage
@@ -33,7 +32,7 @@ public class DownloadTests extends AbstractTest {
         assertEquals(response.getFirstHeader("Content-Type").getValue(), "application/octet-stream");
     }
 
-    @Test(dependsOnGroups = "init", groups = {"download-file"})
+    @Test(groups = {"download-file"})
     public void downloadTextFile() throws InterruptedException {
         String fileName = "Read Me.txt";
         FileDownloadPage downloadPage = PageFactory.initElements(driver, FileDownloadPage.class);
@@ -43,7 +42,7 @@ public class DownloadTests extends AbstractTest {
                 "Manage Projects) to retrieve your icon selection."), "The content of downloaded file is not correct");
     }
 
-    @Test(dependsOnGroups = "init", groups = "upload-file")
+    @Test(groups = "upload-file")
     public void uploadTextFile() throws IOException {
         FileUploadPage uploadPage = PageFactory.initElements(driver, FileUploadPage.class);
 
