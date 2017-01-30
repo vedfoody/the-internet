@@ -21,7 +21,7 @@ public class ExitIntentPage extends AbstractPage {
     }
 
     public ExitIntentPage moveToOutOfViewport() throws AWTException, InterruptedException {
-        WebElement header = waitForElementVisible(driver, driver.findElement(By.cssSelector(".example h3")));
+        WebElement header = waitForElementVisible(driver.findElement(By.cssSelector(".example h3")));
         Robot robot = new Robot();
         robot.mouseMove(header.getLocation().getX(), header.getLocation().getY());
         Thread.sleep(2000);

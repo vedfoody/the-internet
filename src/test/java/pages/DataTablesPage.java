@@ -1,16 +1,12 @@
 package pages;
 
-import enums.SortType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import pages.fragments.SortTable;
+import utilities.Wait;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static utilities.Wait.waitForAllElementsVisible;
 import static utilities.Wait.waitForElementVisible;
 
 /**
@@ -34,17 +30,17 @@ public class DataTablesPage extends AbstractPage {
     }
 
     public SortTable getFirstTable() {
-        return new SortTable(driver, waitForElementVisible(driver, firstTable));
+        return new SortTable(driver, waitForElementVisible(firstTable));
     }
 
     public SortTable getSecondTable() {
-        return new SortTable(driver, waitForElementVisible(driver, secondTable));
+        return new SortTable(driver, waitForElementVisible(secondTable));
     }
 
     private WebElement getTable(int index) {
         // this should be used instead of using @FindBy
         // the values on table are change continuously when performing any action.
-        return waitForElementVisible(driver, By.id("table" + index), driver);
+        return Wait.waitForElementVisible(driver, By.id("table" + index));
     }
 }
 

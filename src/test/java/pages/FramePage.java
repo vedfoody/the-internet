@@ -3,9 +3,11 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import utilities.Wait;
 
 import java.util.List;
 
+import static utilities.Wait.waitForElementVisible;
 import static utilities.Wait.waitForAllElementsVisible;
 import static utilities.Wait.waitForElementVisible;
 
@@ -20,7 +22,7 @@ public class FramePage extends AbstractPage {
 
     public FramePage open() {
         driver.get(ROOT_URL + "/frames");
-        waitForElementVisible(driver, By.cssSelector(".example h3"), driver);
+        Wait.waitForElementVisible(driver, By.cssSelector(".example h3"));
 
         return this;
     }
@@ -39,18 +41,18 @@ public class FramePage extends AbstractPage {
     }
 
     public FramePage jumpIntoLeftFrame() {
-        driver.switchTo().frame(waitForElementVisible(driver, By.cssSelector("frame[src='/frame_left']"), driver));
+        driver.switchTo().frame(Wait.waitForElementVisible(driver, By.cssSelector("frame[src='/frame_left']")));
         return this;
     }
 
     public FramePage jumpIntoTopFrame() {
-        driver.switchTo().frame(waitForElementVisible(driver, driver.findElement(By.cssSelector
+        driver.switchTo().frame(waitForElementVisible(driver.findElement(By.cssSelector
                 ("frame[src='/frame_top']"))));
         return this;
     }
 
     public String getBodyText() {
-        return waitForElementVisible(driver, driver.findElement(By.tagName("body"))).getText();
+        return waitForElementVisible(driver.findElement(By.tagName("body"))).getText();
     }
 
     public FramePage jumpIntoIframe() {
@@ -59,7 +61,7 @@ public class FramePage extends AbstractPage {
     }
 
     private List<WebElement> getLinks() {
-        return waitForAllElementsVisible(driver, By.cssSelector(".example li"), driver);
+        return waitForAllElementsVisible(driver, By.cssSelector(".example li"));
     }
 
     private WebElement findLink(String linkText) {
@@ -70,7 +72,7 @@ public class FramePage extends AbstractPage {
     }
 
     private FramePage waitForIframeLoading() {
-        waitForElementVisible(driver, driver.findElement(By.id("mceu_13")));
+        waitForElementVisible(driver.findElement(By.id("mceu_13")));
         return this;
     }
 }

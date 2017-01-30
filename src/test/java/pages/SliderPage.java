@@ -54,6 +54,6 @@ public class SliderPage extends AbstractPage {
     }
 
     public String getSliderValue() {
-        return waitForElementVisible(driver, sliderValue).getText();
+        return waitForElementVisible(sliderValue).getText();
     }
 }

@@ -21,17 +21,17 @@ public class GeolocationPage extends AbstractPage {
     }
 
     public Location getLocation() {
-        waitForElementVisible(driver, By.cssSelector(".example button"), driver).click();
+        waitForElementVisible(driver, By.cssSelector(".example button")).click();
 
         return new Location(Float.parseFloat(getLatitude()), Float.parseFloat(getLongitude()));
     }
 
     private String getLatitude() {
-        return waitForElementVisible(driver, By.id("lat-value"), driver).getText();
+        return waitForElementVisible(driver, By.id("lat-value")).getText();
     }
 
     private String getLongitude() {
-        return waitForElementVisible(driver, By.id("long-value"), driver).getText();
+        return waitForElementVisible(driver, By.id("long-value")).getText();
     }
 }
 

@@ -28,14 +28,14 @@ public class FileUploadPage extends AbstractPage {
     }
 
     public FileUploadPage uploadFile(Path filePath) {
-        waitForElementVisible(driver, driver.findElement(By.id("file-upload"))).sendKeys(filePath.toString());
-        waitForElementVisible(driver, submitButton).click();
+        waitForElementVisible(driver.findElement(By.id("file-upload"))).sendKeys(filePath.toString());
+        waitForElementVisible(submitButton).click();
 
         return this;
     }
 
     public void checkUploadedFile(String uploadedFileName) {
-        Assert.assertEquals(waitForElementVisible(driver, driver.findElement(By.id("uploaded-files"))).getText(),
+        Assert.assertEquals(waitForElementVisible(driver.findElement(By.id("uploaded-files"))).getText(),
                 uploadedFileName, uploadedFileName + " is not uploaded");
     }
 }

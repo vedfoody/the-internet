@@ -28,7 +28,7 @@ public class ChallengingDOMPage extends AbstractPage {
     public String getCanvasProperty(CanvasProperty property){
         JavascriptExecutor executor = (JavascriptExecutor) driver;
         Object value = executor.executeScript("return arguments[0].getContext('2d')." + property.toString(),
-                waitForElementVisible(driver, canvas));
+                waitForElementVisible(canvas));
 
         return value.toString();
     }

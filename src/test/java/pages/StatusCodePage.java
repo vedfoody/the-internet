@@ -35,6 +35,6 @@ public class StatusCodePage extends AbstractPage {
     }
 
     private List<WebElement> getLinks() {
-        return waitForAllElementsVisible(driver, By.cssSelector(".example li a"), driver);
+        return waitForAllElementsVisible(driver, By.cssSelector(".example li a"));
     }
 }

@@ -39,11 +39,11 @@ public class SortTable extends AbstractFragment {
     }
 
     private List<WebElement> getHeaders() {
-        return waitForElementVisible(driver, root).findElements(By.cssSelector("thead th"));
+        return waitForElementVisible(root).findElements(By.cssSelector("thead th"));
     }
 
     private List<WebElement> getColsByIndex(int index) {
-        return waitForAllElementsVisible(driver, By.cssSelector("tbody tr td:nth-child(" + index + ")"), root);
+        return waitForAllElementsVisible(root, By.cssSelector("tbody tr td:nth-child(" + index + ")"));
     }
 
     private SortType getSortType(String colHeader) {

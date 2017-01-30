@@ -34,7 +34,7 @@ public class MenuPage extends AbstractPage {
     }
 
     public MenuPage waitForLoading() {
-        waitForElementVisible(driver, By.cssSelector(".example h3"), driver);
+        waitForElementVisible(driver, By.cssSelector(".example h3"));
         return this;
     }
 
