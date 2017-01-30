@@ -20,7 +20,7 @@ public class ForgotPasswordPage extends AbstractPage {
     }
 
     public void retrievePassword(String email) {
-        waitForElementVisible(driver, driver.findElement(By.id("email"))).sendKeys(email);
-        waitForElementVisible(driver, driver.findElement(By.id("form_submit"))).click();
+        waitForElementVisible(driver.findElement(By.id("email"))).sendKeys(email);
+        waitForElementVisible(driver.findElement(By.id("form_submit"))).click();
     }
 }

@@ -42,11 +42,11 @@ public class JavaScriptAlertPage extends AbstractPage {
     }
 
     public String getResult() {
-        return waitForElementVisible(driver, result).getText();
+        return waitForElementVisible(result).getText();
     }
 
     private WebElement getButtonByCaption(String caption) {
-        return waitForAllElementsVisible(driver, By.cssSelector(".example button"), driver)
+        return waitForAllElementsVisible(driver, By.cssSelector(".example button"))
                 .stream().filter(e -> e.getText().equals(caption)).findFirst().get();
     }
 }

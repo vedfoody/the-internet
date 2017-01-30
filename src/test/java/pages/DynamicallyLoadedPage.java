@@ -28,7 +28,7 @@ public class DynamicallyLoadedPage extends AbstractPage {
     }
 
     public DynamicallyLoadedPage startWaitingProcess() {
-        waitForElementVisible(driver, startButton).click();
+        waitForElementVisible(startButton).click();
         return this;
     }
 

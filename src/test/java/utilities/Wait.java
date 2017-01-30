@@ -1,15 +1,22 @@
 package utilities;
 
+import com.google.common.base.Predicate;
 import org.apache.commons.io.FilenameUtils;
-import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import variables.GlobalVariables;
 
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 /**
@@ -48,29 +55,49 @@ public class Wait {
         }
     }
 
-    public static WebElement waitForElementVisible(WebDriver driver, WebElement element) {
-        return new WebDriverWait(driver, TIME_OUT_FOR_LOADING_ELEMENT)
-                .until(ExpectedConditions.visibilityOf(element));
+    public static WebElement waitForElementVisible(WebElement element) {
+        org.openqa.selenium.support.ui.Wait<WebElement> wait = new FluentWait<WebElement>(element);
+
+        return wait.until(e -> isElementVisible(e) ? e : null);
     }
 
-    public static WebElement waitForElementVisible(WebDriver driver, By locator, SearchContext context) {
-        return new WebDriverWait(driver, TIME_OUT_FOR_LOADING_ELEMENT)
-                .until(new ExpectedCondition<WebElement>() {
-                    @Override
-                    public WebElement apply(WebDriver input) {
-                        return context.findElement(locator);
-                    }
-                });
+    public static WebElement waitForElementVisible(SearchContext context, By locator) {
+        org.openqa.selenium.support.ui.Wait<SearchContext> wait = new FluentWait<>(context)
+                .withTimeout(TIME_OUT_FOR_LOADING_ELEMENT, TimeUnit.SECONDS);
+
+        return wait.until(currentContext -> {
+            WebElement element = currentContext.findElement(locator);
+            return isElementVisible(element) ? element : null;
+        });
     }
 
-    public static List<WebElement> waitForAllElementsVisible(WebDriver driver, By locator, SearchContext context) {
-        return new WebDriverWait(driver, TIME_OUT_FOR_LOADING_ELEMENT)
-                .until(new ExpectedCondition<List<WebElement>>() {
-                    @Override
-                    public List<WebElement> apply(WebDriver input) {
-                        return context.findElements(locator);
-                    }
-                });
+    public static List<WebElement> waitForAllElementsVisible(SearchContext context, By locator) {
+        org.openqa.selenium.support.ui.Wait<SearchContext> wait = new FluentWait<>(context)
+                .withTimeout(TIME_OUT_FOR_LOADING_ELEMENT, TimeUnit.SECONDS);
+
+        return wait.until(currentContext -> {
+            List<WebElement> elements = currentContext.findElements(locator);
+            for (WebElement element : elements) {
+                if (!isElementVisible(element))
+                    return null;
+            }
+
+            return elements.isEmpty() ? null : elements;
+        });
+    }
+
+    public static List<WebElement> waitForAllElementsVisible(List<WebElement> elements) {
+        org.openqa.selenium.support.ui.Wait<List<WebElement>> wait = new FluentWait<>(elements)
+                .withTimeout(TIME_OUT_FOR_LOADING_ELEMENT, TimeUnit.SECONDS);
+
+        return wait.until(searchElements -> {
+            for (WebElement element : searchElements) {
+                if (!isElementVisible(element))
+                    return null;
+            }
+
+            return searchElements.isEmpty() ? null : searchElements;
+        });
     }
 
     public static WebElement waitForElementPresent(WebDriver driver, By locator) {
@@ -84,5 +111,9 @@ public class Wait {
 
     private static boolean isDownloaded(File file) {
         return file.exists() && !file.isDirectory();
+    }
+
+    private static boolean isElementVisible(WebElement element) {
+        return element.isDisplayed();
     }
 }

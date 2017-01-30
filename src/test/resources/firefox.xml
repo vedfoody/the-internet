@@ -2,11 +2,7 @@
 
 <suite name="firefox-suite">
     <parameter name="browser" value="firefox"/>
-    <test name="test-1">
-        <!--<classes>-->
-            <!--<class name="tests.StatusCodeTest"/>-->
-        <!--</classes>-->
-
+    <test name="All-tests">
         <packages>
             <package name="tests"/>
         </packages>
