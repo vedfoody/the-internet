@@ -63,7 +63,9 @@ public class AbstractTest {
     private void getFirefoxDriver() {
         System.out.println("The test is using firefox browser");
 
-        FirefoxBinary binaryFile = new FirefoxBinary(new File(System.getProperty("binaryFile")));
+//        FirefoxBinary binaryFile = new FirefoxBinary(new File(System.getProperty("binaryFile")));
+        FirefoxBinary binaryFile = new FirefoxBinary(new File(System.getenv("binaryFile")));
+
 
         LoggingPreferences logs = new LoggingPreferences();
         logs.enable(LogType.BROWSER, Level.SEVERE);
